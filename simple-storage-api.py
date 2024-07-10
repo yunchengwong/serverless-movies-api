@@ -1,7 +1,8 @@
+import os
 from google.cloud import storage
 
 
-def authenticate_implicit_with_adc(project_id="sodium-hue-427709-u4"):
+def authenticate_implicit_with_adc(project_id=os.environ['PROJECT']):
     storage_client = storage.Client(project=project_id)
     buckets = storage_client.list_buckets()
     print("Buckets:")

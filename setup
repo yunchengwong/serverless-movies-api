@@ -1,9 +1,6 @@
 #!/bin/bash
 
 
-KEY_FILE='service-account-storage.json'
-
-
 # Installing the gcloud CLI
 setup_gcloud() {
     sudo apt-get update
@@ -13,16 +10,19 @@ setup_gcloud() {
     sudo apt-get update && sudo apt-get install google-cloud-cli
 
     # Authorize with a user account
-    # gcloud init
+    gcloud init
+    gcloud auth application-default login
 
     # Authorize a service account using service account impersonation
     # 1. Authorize the gcloud CLI with your user identity
     # gcloud init
     # 2. Set up the gcloud CLI to use the identity and access provided by a service account by default
-    # gcloud config set auth/impersonate_service_account SERVICE_ACCT_EMAIL
+    # gcloud config set auth/impersonate_service_account $SERVICE_ACCT_EMAIL
+    # gcloud auth application-default login --impersonate-service-account $SERVICE_ACCT_EMAIL
 
     # Authorize a service account using a service account key
-    gcloud auth login --cred-file=$KEY_FILE
+    # gcloud auth login --cred-file=$KEY_FILE
+    # export GOOGLE_APPLICATION_CREDENTIALS=$KEY_PATH
 
     check_gcloud_property
 }
@@ -80,14 +80,14 @@ setup_python() {
     sudo python3 get-pip.py
     pip3 --version # (optional)
 
-    # Using venv to isolate dependencies
-    python3 -m venv env
-    source env/bin/activate
-
     # Installing the Cloud Client Libraries for Python
-    pip install google-cloud-storage
+    # pip install google-cloud-storage
 }
 
 
 # setup_gcloud
-check_gcloud_property
+# setup_python
+
+export PROJECT=$(gcloud config get project)
+export REGION=$(gcloud config get compute/region)
+export ZONE=$(gcloud config get compute/zone)
