@@ -1,6 +1,9 @@
 #!/bin/bash
 
 
+KEY_FILE='service-account-storage.json'
+
+
 # Installing the gcloud CLI
 setup_gcloud() {
     sudo apt-get update
@@ -10,7 +13,7 @@ setup_gcloud() {
     sudo apt-get update && sudo apt-get install google-cloud-cli
 
     # Authorize with a user account
-    gcloud init
+    # gcloud init
 
     # Authorize a service account using service account impersonation
     # 1. Authorize the gcloud CLI with your user identity
@@ -19,7 +22,52 @@ setup_gcloud() {
     # gcloud config set auth/impersonate_service_account SERVICE_ACCT_EMAIL
 
     # Authorize a service account using a service account key
-    # gcloud auth login --cred-file=KEY_FILE
+    gcloud auth login --cred-file=$KEY_FILE
+
+    check_gcloud_property
+}
+
+
+check_gcloud_property() {
+    PROJECT=$(gcloud config get project)
+	REGION=$(gcloud config get compute/region)
+	ZONE=$(gcloud config get compute/zone)
+
+    if [ -z "$PROJECT" ]; then
+        echo "No project set. Listing available projects:"
+        gcloud projects list
+        while true; do
+            read -p "Enter project ID from the list: " project
+            if gcloud projects describe $project &> /dev/null; then
+                break
+            else
+                echo "Invalid project ID. Please enter a valid project ID from the list."
+            fi
+        done
+        PROJECT=$project
+        gcloud config set project $PROJECT
+    fi
+
+    if [ -z "$REGION" ]; then
+		if [ -z "$ZONE" ]; then
+            echo "No zone set. Listing available zones:"
+            cat zones.txt
+            read -p "Enter zone from the list or leave blank to use the default(us-central1-b): " zone
+			if [ -z "$zone" ]; then
+				ZONE=us-central1-b
+                echo "zone is empty"
+			else
+                if grep -q "$zone," zones_modified.txt; then
+                    ZONE=${zone%,*}
+                else
+                    ZONE=us-central1-b
+                fi
+			fi
+		fi
+		REGION=${ZONE%-*}
+        gcloud config set compute/region $REGION
+	    gcloud config set compute/zone $ZONE
+	fi
 }
 
 
@@ -41,5 +89,5 @@ setup_python() {
 }
 
 
-setup_gcloud
-setup_python
+# setup_gcloud
+check_gcloud_property
