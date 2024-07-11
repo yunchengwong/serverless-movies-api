@@ -1,5 +1,11 @@
 # serverless-movie-api
 
+must enable api
+- Cloud Firestore API
+
+create database
+- database id (permanent): (default)
+
 to export variable to current shell environment:
 
 ```

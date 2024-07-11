@@ -78,16 +78,12 @@ setup_python() {
     sudo apt-get install wget
     wget https://bootstrap.pypa.io/get-pip.py
     sudo python3 get-pip.py
-    pip3 --version # (optional)
 
     # Installing the Cloud Client Libraries for Python
     # pip install google-cloud-storage
+    # pip install google-cloud-firestore
 }
 
 
-# setup_gcloud
-# setup_python
-
-export PROJECT=$(gcloud config get project)
-export REGION=$(gcloud config get compute/region)
-export ZONE=$(gcloud config get compute/zone)
+setup_gcloud
+setup_python
