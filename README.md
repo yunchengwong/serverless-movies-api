@@ -1,22 +1,23 @@
-# serverless-movie-api
+# SERVERLESS-MOVIES-API
 
-must enable api
-- Cloud Firestore API
+## STEPS
 
-create database
-- database id (permanent): (default)
+#### Create Your Cloud Infrastructure
 
-to export variable to current shell environment:
+- gcloud cli
+- application default credential (ADC)
+- python
+- google cloud client libraries for python
+    - cloud storage
+    - firestore
+    - cloud function
 
-```
-source setup
-```
+#### Prepare Your Data
 
-(Optional) Using venv to isolate dependencies:
+- AWS IMDb API
 
-```
-python3 -m venv env
-source env/bin/activate
+#### Create Serverless Functions
 
-pip install google-cloud-storage
-```
+- GetMovies()
+- GetMoviesByYear(year)
+- GetMovieSummary(title)
