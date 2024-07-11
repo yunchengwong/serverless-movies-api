@@ -5,7 +5,7 @@
 #### Create Your Cloud Infrastructure
 
 - gcloud cli
-- application default credential (ADC)
+- google application default credential (ADC)
 - python
 - google cloud client libraries for python
     - cloud storage
