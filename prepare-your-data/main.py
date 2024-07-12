@@ -4,7 +4,7 @@ import urllib.request
 from typing import List
 
 
-BUCKET = "moviesapi-bucket-[project]"
+BUCKET = "symmetrical-acorn-bucket"
 
 """Store movie cover images of each movie in cloud storage."""
 
@@ -28,7 +28,7 @@ def create_bucket(bucket_name):
 # https://stackoverflow.com/questions/25412119/uploading-an-image-from-an-external-link-to-google-cloud-storage-using-google-ap
 # https://cloud.google.com/storage/docs/uploading-objects#storage-upload-object-python
 def upload_blob(bucket_name, source_file_name, destination_blob_name):
-    """Uploads a file to the bucket."""
+    """Uploads a object to the bucket."""
     # bucket_name = "moviesapi-bucket"
     # source_file_name = movie['coverUrl']
     # destination_blob_name = movie['title'] + ".jpg"
@@ -51,7 +51,7 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
         print('Could not upload image. Generic exception: ' + traceback.format_exc())
 
     print(
-        f"File {source_file_name} uploaded to {destination_blob_name}."
+        f"File {source_file_name} uploaded as {destination_blob_name}."
     )
 
 
@@ -73,64 +73,21 @@ def set_bucket_public_iam(
 
     bucket.set_iam_policy(policy)
 
-    print(f"Bucket {bucket.name} is now publicly readable")
-
-
-# "Public access URL: https://storage.googleapis.com/$BUCKET/$OBJECT"
-
-create_bucket(BUCKET)
-
-with open('example_data.json') as f:
-    movies = json.load(f)
-
-for movie in movies:
-    movie['id'] = movie['title'].replace(" ", "").lower() + movie['releaseYear']
-    upload_blob(movie['coverUrl'], movie['id'] + ".jpg")
-    movie['coverUrl'] = f"https://storage.googleapis.com/{BUCKET}/{movie['id']}.jpg"
-
-with open('processed_data.json', 'w') as f:
-    json.dump(movies, f, indent=4)
-
-set_bucket_public_iam(BUCKET)
+    print(f"Bucket {bucket_name} is now publicly readable")
 
 
 """Find movie data or create it and store it in your cloud NoSQL db."""
 
-db = firestore.Client()
+# https://cloud.google.com/firestore/docs/create-database-server-client-library#firestore_setup_dataset_pt1-python
+def upload_doc(movie):
+    """Uploads a document to the collection."""
+    # document_name = movie['title']
+    # document_data_in_dict = movie
 
-class Movie:
-    def __init__(self, title, releaseYear, genre=[], coverUrl=""):
-        self.title = title
-        self.releaseYear = releaseYear
-        self.genre = genre
-        self.coverUrl = coverUrl
-    
-    def to_dict(self):
-        return {
-            "title": self.title,
-            "releaseYear": self.releaseYear,
-            "genre": self.genre,
-            "coverUrl": self.coverUrl
-        }
+    db = firestore.Client()
+    doc_ref = db.collection("movies").document(movie['title'])
+    doc_ref.set(movie)
 
-movies_ref = db.collection("movies")
-movies_ref.add(
-    Movie(
-        "Inception", 2010,  ["Science", "Fiction", "Action"], "https://example.com/inception.jpg"
-    ).to_dict()
-)
-movies_ref.add(
-    Movie(
-        "The Shawshank Redemption", 1994, ["Drama", "Crime"], "https://example.com/shawshank-redemption.jpg"
-    ).to_dict()
-)
-movies_ref.add(
-    Movie(
-        "The Dark Knight", 2008, ["Action", "Drama", "Crime"], "https://example.com/dark-knight.jpg"
-    ).to_dict()
-)
-
-movies = movies_ref.stream()
-
-for movie in movies:
-    print(f"{movie.id} => {movie.to_dict()}")
+    print(
+        f'Document {movie["title"]} uploaded to collection "movies".'
+    )

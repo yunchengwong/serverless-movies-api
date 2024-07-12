@@ -80,8 +80,9 @@ setup_python() {
     sudo python3 get-pip.py
 
     # Installing the Cloud Client Libraries for Python
-    # pip install google-cloud-storage
-    # pip install google-cloud-firestore
+    # pip install google-cloud-storage google-cloud-firestore
+
+    # gcloud firestore databases update --database=symmetrical-acorn
 }
 
 
