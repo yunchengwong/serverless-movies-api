@@ -1,0 +1,20 @@
+[
+    {
+        "title": "Inception",
+        "releaseYear": "2010",
+        "genre": "Action, Adventure, Sci-Fi",
+        "coverUrl": "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_FMjpg_UX1000_.jpg"
+     },
+    {
+        "title": "The Shawshank Redemption",
+        "releaseYear": "1994",
+        "genre": "Drama",
+        "coverUrl": "https://m.media-amazon.com/images/M/MV5BNDE3ODcxYzMtY2YzZC00NmNlLWJiNDMtZDViZWM2MzIxZDYwXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_FMjpg_UX1000_.jpg"
+    },
+    {
+        "title": "The Dark Knight",
+        "releaseYear": "2008",
+        "genre": "Action, Crime, Drama",
+        "coverUrl": "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_FMjpg_UX1000_.jpg"
+    }
+]
