@@ -55,7 +55,6 @@ check_gcloud_property() {
             read -p "Enter zone from the list or leave blank to use the default(us-central1-b): " zone
 			if [ -z "$zone" ]; then
 				ZONE=us-central1-b
-                echo "zone is empty"
 			else
                 if grep -q "$zone," zones_modified.txt; then
                     ZONE=${zone%,*}
@@ -80,9 +79,7 @@ setup_python() {
     sudo python3 get-pip.py
 
     # Installing the Cloud Client Libraries for Python
-    # pip install google-cloud-storage google-cloud-firestore
-
-    # gcloud firestore databases update --database=symmetrical-acorn
+    pip install google-cloud-storage google-cloud-firestore
 }
 
 

@@ -44,14 +44,13 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
             info = response.info()
             if(info.get_content_type().startswith("image")):
                 blob.upload_from_string(response.read(), content_type=info.get_content_type())
-                print("Uploaded image from: " + source_file_name)
             else:
                 print("Could not upload image. No image data type in URL")
     except Exception:
         print('Could not upload image. Generic exception: ' + traceback.format_exc())
 
     print(
-        f"File {source_file_name} uploaded as {destination_blob_name}."
+        f'File "{source_file_name}" uploaded as {destination_blob_name}.'
     )
 
 
@@ -73,7 +72,7 @@ def set_bucket_public_iam(
 
     bucket.set_iam_policy(policy)
 
-    print(f"Bucket {bucket_name} is now publicly readable")
+    print(f'Bucket "{bucket_name} is now publicly readable')
 
 
 """Find movie data or create it and store it in your cloud NoSQL db."""
@@ -91,3 +90,15 @@ def upload_doc(movie):
     print(
         f'Document {movie["title"]} uploaded to collection "movies".'
     )
+
+with open('example_data.json') as f:
+    movies = json.load(f)
+
+for movie in movies:
+    movie['id'] = movie['title'].replace(" ", "").lower() + movie['releaseYear']
+    upload_blob(BUCKET, movie['coverUrl'], movie['id'] + ".jpg")
+    movie['coverUrl'] = f"https://storage.googleapis.com/{BUCKET}/{movie['id']}.jpg"
+
+    upload_doc(movie)
+
+set_bucket_public_iam(BUCKET)
