@@ -1,4 +1,4 @@
-from google.cloud import storage
+from google.cloud import storage, firestore
 import json
 import urllib.request
 from typing import List
@@ -6,6 +6,7 @@ from typing import List
 
 BUCKET = "moviesapi-bucket-[project]"
 
+"""Store movie cover images of each movie in cloud storage."""
 
 # https://cloud.google.com/storage/docs/reference/libraries#client-libraries-usage-python
 # https://cloud.google.com/storage/docs/creating-buckets#storage-create-bucket-client_libraries
@@ -83,8 +84,53 @@ with open('example_data.json') as f:
     movies = json.load(f)
 
 for movie in movies:
-    upload_blob(BUCKET, movie['coverUrl'], movie['title'] + ".jpg")
+    movie['id'] = movie['title'].replace(" ", "").lower() + movie['releaseYear']
+    upload_blob(movie['coverUrl'], movie['id'] + ".jpg")
+    movie['coverUrl'] = f"https://storage.googleapis.com/{BUCKET}/{movie['id']}.jpg"
+
+with open('processed_data.json', 'w') as f:
+    json.dump(movies, f, indent=4)
 
 set_bucket_public_iam(BUCKET)
 
-# firestore: store movies details (including url) in database
+
+"""Find movie data or create it and store it in your cloud NoSQL db."""
+
+db = firestore.Client()
+
+class Movie:
+    def __init__(self, title, releaseYear, genre=[], coverUrl=""):
+        self.title = title
+        self.releaseYear = releaseYear
+        self.genre = genre
+        self.coverUrl = coverUrl
+    
+    def to_dict(self):
+        return {
+            "title": self.title,
+            "releaseYear": self.releaseYear,
+            "genre": self.genre,
+            "coverUrl": self.coverUrl
+        }
+
+movies_ref = db.collection("movies")
+movies_ref.add(
+    Movie(
+        "Inception", 2010,  ["Science", "Fiction", "Action"], "https://example.com/inception.jpg"
+    ).to_dict()
+)
+movies_ref.add(
+    Movie(
+        "The Shawshank Redemption", 1994, ["Drama", "Crime"], "https://example.com/shawshank-redemption.jpg"
+    ).to_dict()
+)
+movies_ref.add(
+    Movie(
+        "The Dark Knight", 2008, ["Action", "Drama", "Crime"], "https://example.com/dark-knight.jpg"
+    ).to_dict()
+)
+
+movies = movies_ref.stream()
+
+for movie in movies:
+    print(f"{movie.id} => {movie.to_dict()}")
