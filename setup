@@ -66,6 +66,7 @@ check_gcloud_property() {
 		REGION=${ZONE%-*}
         gcloud config set compute/region $REGION
 	    gcloud config set compute/zone $ZONE
+        gcloud config set functions/region $REGION
 	fi
 }
 
@@ -79,7 +80,7 @@ setup_python() {
     sudo python3 get-pip.py
 
     # Installing the Cloud Client Libraries for Python
-    pip install google-cloud-storage google-cloud-firestore
+    pip install google-cloud-storage google-cloud-firestore google-cloud-aiplatform
 }
 
 

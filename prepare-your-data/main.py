@@ -72,33 +72,34 @@ def set_bucket_public_iam(
 
     bucket.set_iam_policy(policy)
 
-    print(f'Bucket "{bucket_name} is now publicly readable')
+    print(f'Bucket "{bucket_name}" is now publicly readable')
 
 
 """Find movie data or create it and store it in your cloud NoSQL db."""
 
 # https://cloud.google.com/firestore/docs/create-database-server-client-library#firestore_setup_dataset_pt1-python
-def upload_doc(movie):
+def upload_doc(movie, movie_id):
     """Uploads a document to the collection."""
-    # document_name = movie['title']
-    # document_data_in_dict = movie
+    # document_name = movie['title'].replace(" ", "").lower() + movie['releaseYear']
+    # document_data = movie
 
     db = firestore.Client()
-    doc_ref = db.collection("movies").document(movie['title'])
+    doc_ref = db.collection("movies").document(movie_id)
     doc_ref.set(movie)
 
     print(
-        f'Document {movie["title"]} uploaded to collection "movies".'
+        f'Document "{movie_id}" uploaded to collection "movies".'
     )
+
 
 with open('example_data.json') as f:
     movies = json.load(f)
 
 for movie in movies:
-    movie['id'] = movie['title'].replace(" ", "").lower() + movie['releaseYear']
-    upload_blob(BUCKET, movie['coverUrl'], movie['id'] + ".jpg")
-    movie['coverUrl'] = f"https://storage.googleapis.com/{BUCKET}/{movie['id']}.jpg"
+    movie_id = movie['title'].replace(" ", "").lower()
+    upload_blob(BUCKET, movie['coverUrl'], movie_id + ".jpg")
+    movie['coverUrl'] = f"https://storage.googleapis.com/{BUCKET}/{movie_id}.jpg"
 
-    upload_doc(movie)
+    upload_doc(movie, movie_id)
 
 set_bucket_public_iam(BUCKET)
