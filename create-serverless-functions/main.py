@@ -11,7 +11,7 @@ moviesbyyear = []
 
 app = Flask("internal")
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/getmovies', methods=['GET', 'POST'])
 def getmovies():
     db = firestore.Client()
 
