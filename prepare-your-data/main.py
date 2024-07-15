@@ -97,6 +97,7 @@ with open('example_data.json') as f:
 
 for movie in movies:
     movie_id = movie['title'].replace(" ", "").lower()
+    
     upload_blob(BUCKET, movie['coverUrl'], movie_id + ".jpg")
     movie['coverUrl'] = f"https://storage.googleapis.com/{BUCKET}/{movie_id}.jpg"
 
