@@ -46,6 +46,7 @@ def getmoviesummary(id):
         .document(id.replace("-", ""))
         .get()
     )
+    
     if doc.exists:
         movie = doc.to_dict()
         prompt = f"Create a one-sentence summary of the movie '{movie['title']}' released in '{movie['releaseYear']}'."
@@ -60,7 +61,7 @@ def getmoviesummary(id):
 
 
 #Comply with Cloud Functions code structure for entry point
-def serverless_movies_api(request):
+def my_function(request):
     #Create a new app context for the internal app
     internal_ctx = app.test_request_context(path=request.full_path,
                                             method=request.method)
