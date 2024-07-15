@@ -1,5 +1,7 @@
 ## SERVERLESS-MOVIES-API
 
+An API with serverless functions that display movie information.
+
 #### 0. PREREQUISITES
 
 - **Google Cloud Account:** You must have a Google Cloud account with active billing. [Create free account](https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwjv4rag0YiHAxWL4RYFHelWBqoYABABGgJ0bA&co=1&ase=2&gclid=CjwKCAjwyo60BhBiEiwAHmVLJcA7TabY8sV7owWMwhfaBI9U_3A1qSMIimrhMpXi4HVE5Gx-oI-LjhoCo0wQAvD_BwE&ei=yheEZpDINLeF4-EPwvaCiAE&ohost=www.google.com&cid=CAESVeD2brbPcj_YXbA6und6jqaPM94VVZu70iyOdtc6jG8nz_HwuVI3QFrinlciXwXvocM485XEMkE9HPx8hmXk4bhd5ZSuS2M580J4Dw9ApjvAN3ZOnYo&sig=AOD64_2zm-TBrPQGuwtu9BNoMLZM2qPAlg&q&sqi=2&nis=6&adurl&ved=2ahUKEwiQ1ayg0YiHAxW3wjgGHUK7ABEQqyQoAHoECBEQDA).
